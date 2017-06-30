@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<!--
+  the agony of javascripting magritte part 2
+    Have one label actually match the object, and include the source of where the window imagery comes from.
+-->
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>the agony of javascripting magritte | vart.institute on glitch!</title>
+  <meta name="description" content="a generative recreation of rene magritte's the interpretation of dreams, a part of vart.institute">
+  <style type="text/css">
+    #frame { width: 500px; text-align: center; margin: 50px 10px; }
+    section { display: inline-block; border: 1px solid black; margin: 10px 20px; }
+    .window { width: 200px; height: 150px; background-color: cyan; }
+  </style>
+    
+</head>
+
+<body id="magritte">
+
+  <body>
+  
+  <div id="frame">
+  <section>
+    <div class="window"></div>
+    <p class="label"></p>
+  </section>
+
+  <section>
+    <div class="window"></div>
+    <p class="label"></p>
+  </section>
+
+  <section>
+    <div class="window"></div>
+    <p class="label"></p>
+  </section>
+
+  <section>
+    <div class="window"></div>
+    <p class="label"></p>
+  </section>
+ </div>
+  
+</body>
+  
+  <script type="text/javascript">
+    (function(){
+
+      /*** init variables ***/
+
+      // just a bucket of things
+      var things = [
+        { module: 'sky', label: 'the sky' },
+        { module: 'bells', label: 'a bell' },
+        { module: 'bilboquet', label: 'a bilboquet' },
+        { module: 'apple', label: 'an apple' },
+        { module: 'hat', label: 'a hat'},
+        { module: 'javascript', label: 'a javascript' },
+        { module: 'sign', label: 'the sign' },
+        { module: 'rooster', label: 'a rooster' }
+      ];
+
+      var sections = document.getElementsByTagName('section');
+
+      // keep track of each window/label used
+      var usedGoods = [];
+      var randomCorrectWindowId = Math.floor(Math.random() * 4);
+
+      /*** helper functions ***/
+
+      // returns id of object not yet used
+      var generateRandomThing = function() {
+
+        var usableId;
+        var need = true;
+
+        while ( need ) {
+          usableId = Math.floor(Math.random() * things.length);
+
+          // if x is not in usedGoods, set need to false and set as used
+          if ( usedGoods.indexOf(usableId) === -1 ) {
+            usedGoods.push(usableId)
+            need = false;
+          }
+        }
+
+        return usableId;
+      };
+
+
+      /*** let's generate some friggin art ***/
+
+      // for each section
+      var sectionList = Array.prototype.slice.call(sections);
+      sectionList.forEach(function(elem, i){
+        // generate random window and label to use
+        var windowId = generateRandomThing();
+        var labelId;
+        
+        if (i === randomCorrectWindowId) {
+          labelId = windowId;
+        }
+        else {
+          labelId = generateRandomThing();
+        }
+
+        var window = elem.getElementsByClassName('window')[0];
+        window.innerHTML = things[windowId].module;
+        var label = elem.getElementsByClassName('label')[0];
+        label.innerHTML = things[labelId].label;
+
+      });
+
+    }());
+  </script>  
+        
+  </body>
+
+</html>

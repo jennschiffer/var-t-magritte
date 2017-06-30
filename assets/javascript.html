@@ -1,0 +1,92 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style type="text/css">
+    body { margin: 0; padding: 0; color: lime; background-color: black; }
+    #module { width: 100%; height: 200px; position: relative; overflow: hidden; }
+    @-webkit-keyframes javascript {
+      0% {margin-top: 0px;}
+      100% {margin-top: -800px;}
+    }
+    @-moz-keyframes javascript {
+      0% {margin-top: 0px;}
+      100% {margin-top: -800px;}
+    }
+    .javascript { position: absolute; 
+      -webkit-animation: javascript 15s linear infinite; 
+      -moz-animation:  javascript 15s linear infinite; 
+      animation: javascript 15s linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div id="module">
+    <pre class="javascript"><code> (function(){
+   
+  /*** init variables ***/
+   
+  // just a bucket of things
+  var things = [
+    { module: 'sky', label: 'the sky'},
+    { module: 'bell', label: 'the bells'},
+    { module: 'bilboquet', label: 'the bilboquets' },
+    { module: 'apple', label: 'the apple'},
+    { module: 'hat', label: 'the hat' },
+    { module: 'javascript', label: 'the javascript' },
+    { module: 'rooster', label: 'the rooster' }
+  ];
+   
+  var sections = document.getElementsByTagName('section');
+   
+  // keep track of each window/label used
+  var usedGoods = [];
+  var randomCorrectWindowId = Math.floor(Math.random() * 4);
+   
+   
+  /*** helper functions ***/
+   
+  // returns id of object not yet used
+  var generateRandomThing = function() {
+    var usableId;
+    var need = true;
+    while ( need ) {
+      usableId = Math.floor(Math.random() * things.length);
+      // if x is not in usedGoods, set need to false and set as used
+      if ( usedGoods.indexOf(usableId) === -1 ) {
+        usedGoods.push(usableId)
+        need = false;
+      }
+    }
+    return usableId;
+  };
+
+  /*** let's generate some friggin art ***/
+  // for each section
+  var sectionList = Array.prototype.slice.call(sections);
+  sectionList.forEach(function(elem, i){
+    // generate random window and label to use
+    var windowId = generateRandomThing();
+    var labelId;
+    
+    // if random correct window, label and window IDs are the same
+    if ( i === randomCorrectWindowId ) {
+      labelId = windowId;
+    }
+    else {
+      labelId = generateRandomThing();
+    }
+    
+    // embed iframe of corresponding module
+    var iframe = document.createElement('iframe');
+    iframe.setAttribute('src', '/assets/'+ things[windowId].module+'.html');
+    iframe.setAttribute('scrolling', 'no');
+
+    var window = elem.getElementsByClassName('window')[0];
+    window.appendChild(iframe);
+    var label = elem.getElementsByClassName('label')[0];
+    label.innerHTML = things[labelId].label;
+  });
+}());</code></pre>
+  </div>
+</body>
+</html>
